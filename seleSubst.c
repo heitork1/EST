@@ -36,7 +36,6 @@ int menorElem(int *vet, int *congelado, int m)
             pos = i;
         }
     }
-
     return pos;
 }
 
