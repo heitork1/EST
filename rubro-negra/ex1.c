@@ -17,39 +17,71 @@ typedef struct arvore{
     struct no* nulo;
 }Arvore;
 
-void criaNo(Arvore* arvore, No* no, int valor){
+Arvore* criaArvore();
+No* criaNo(Arvore* arvore, int valor);
+void adicionaNo(Arvore* arvore, No* no);
+void rotacionarEsquerda(Arvore* arvore, No* no);
+void rotacionarDireita(Arvore* arvore, No* no);
+void balancear(Arvore* arvore, No* no);
+
+Arvore* criaArvore(){
+    Arvore* arvore = malloc(sizeof(Arvore));
+    No* nulo = malloc(sizeof(No));
+    nulo->cor = Preto;
+    nulo->esquerda = nulo->direita = nulo->pai = NULL;
+    
+    arvore->raiz = nulo;
+    arvore->nulo = nulo;
+    
+    return arvore;
+}
+
+
+No* criaNo(Arvore* arvore, int valor){
+    No* no = malloc(sizeof(No));
     no->cor = Vermelho;
     no->valor = valor;
+    no->esquerda = arvore->nulo;
+    no->direita = arvore->nulo;
+    no->pai = arvore->nulo;
 
     adicionaNo(arvore, no);
 
     balancear(arvore, no);
-}
-
-void percorreEsquerda(No* alvo, No* no){
-    if(alvo== NULL){
-        alvo = no;
-        no->pai=
-    }
-}
-
-void percorreDireita(Arvore* arvore, No* no){
-
+    return no;
 }
 
 void adicionaNo(Arvore* arvore, No* no){
-    if(arvore->raiz == NULL){
-        arvore->raiz = no; 
-        no->pai = arvore->nulo;
-        no->esquerda = arvore->nulo;
-        return;
-    }
-    if(no->valor <= arvore->raiz->valor){
-        percorreEsquerda(arvore->raiz->esquerda, no);
-    } else {
-        percorreDireita(arvore->raiz->direita, no);
+    // if(arvore->raiz == NULL){
+    //     arvore->raiz = no; 
+    //     no->pai = arvore->nulo;
+    //     no->esquerda = arvore->nulo;
+    //     return;
+    // }
+    
+    No* atual = arvore->raiz;
+    No* pai = arvore->nulo;
+    
+    while(atual != arvore->nulo){
+        pai=atual;
+        if(no->valor < atual->valor){
+            atual = atual->esquerda;
+        }else{
+            atual=atual->direita;
+        }
     }
     
+    no->pai = pai;
+    no->esquerda = arvore->nulo;
+    no->direita = arvore->nulo;
+    
+    if (pai == arvore->nulo){
+        arvore->raiz = no;
+    } else if(no->valor < pai->valor){
+        pai->esquerda = no;
+    } else {
+        pai->direita = no;
+    }
 }
 
 void rotacionarEsquerda(Arvore* arvore, No* no){
@@ -142,5 +174,10 @@ void balancear(Arvore* arvore, No* no){
 }
 
 int main(){
-
+    Arvore* arvore = criaArvore();
+    criaNo(arvore, 10);
+    criaNo(arvore, 20);
+    criaNo(arvore, 30);
+    
+    printf("Raiz: %d\n", arvore->raiz->valor);
 }
